@@ -1,1 +1,1 @@
-# Ghi chép quá trình thực tập ỏ VCS 
+# Ghi chép quá trình thực tập ở VCS 
