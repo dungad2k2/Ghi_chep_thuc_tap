@@ -1,1 +1,1 @@
-# Ghi_chep_thuc_tap
+# Ghi chép quá trình thực tập ỏ VCS 
