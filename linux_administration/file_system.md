@@ -93,7 +93,9 @@
   ```
    pvcreate /dev/sdb1
   ```
-- Kiểm tra các physical volume đã tạo được: ![Alt text](pvs.png)
+- Kiểm tra các physical volume đã tạo được: 
+   
+   ![Alt text](pvs.png)
   
 ### 4. Tạo Volume Group:
 - Từ các Physical Volume đã được tạo ta có thể nhóm chùng thành một nhóm
@@ -102,6 +104,7 @@
    ```
   
 - Thực hiện kiểm tra volume group đã được tạo: 
+
    ![Alt text](image/vgdisplay.png)
 
 ### 5. Tạo Logical Volume
@@ -111,6 +114,7 @@
      lvcreate -L [size_of_volume] -n [name of volume] [name of volume group]
   ```
 - Kiểm tra kết quả
+
    ![Alt text](image/lsblk.png)
 
 ### 6. Định dạng logical volume vừa tạo:
@@ -119,8 +123,9 @@
   ```
     mkfs -t ext4 /dev/vg-demo/lv1
   ```
-- Kiểm tra lại: 
-  ![Alt text](iamge/lsblk-f.png)
+- Kiểm tra lại:
+
+  ![Alt text](image/lsblk-f.png)
 
 ### 7. Mount và sử dụng:
 - Tạo thư mục `lvmdemo` và mount logical volume vừa tạo vào thư mục này
@@ -128,5 +133,6 @@
     mount /dev/vg-demo/lv1 lvmdemo
   ```
 - Kiểm tra kết quả bằng lệnh `df -h`:
+
    ![Alt text](image/mount_lv.png)
   
