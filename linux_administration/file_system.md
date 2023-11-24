@@ -40,7 +40,7 @@
 
 - Mount point: là một access point thường là một thư mục trống nơi mà file system đã được tạo hoặc mount để làm cho user có thể tương tác với nó.
 
-![Alt text](Mount.png)
+![Alt text](image/Mount.png)
 
 - Để mount một filesystem ta sử dụng cấu trúc câu lệnh như sau: 
 
@@ -54,7 +54,7 @@
   ```
 
 ## Linux Directory Structure: 
-  ![Alt text](linux.png)
+  ![Alt text](image/linux.png)
 
 
 ## LVM (Logical Volume Manager): 
@@ -62,15 +62,15 @@
   
 - **Lưu ý**: ta không thể dùng logical volumes cho phân vùng `/boot` bởi vì phần bootloader của linux không hỗ trợ logical volume.
   
-![Alt text](lvm.png)
+![Alt text](image/lvm.png)
 - Các thành phần của LVM: 
   1. Physical Volumes 
   2. Volume Groups
   3. Logical Volumes
 - **Physical Volumes:** là những đại diện vật lý hoặc phân vùng đĩa của mình chẳng hạn như `/dev/hda`, `/dev/sdb1`. Ta có thể kết hợp nhiều Physical Volumes lại để tạo thành Volume Groups để dễ dành trong việc quản lý và phân chia.
-![Alt text](logicalvolume.png)
+![Alt text](image/logicalvolume.png)
 - **Volume Group:** là một nhóm nhiều Physical Volumes tạo thành. Một Volume Group có thể bao gồm nhiều các Physical Volumes trên các ổ đĩa khác nhau.   
-![Alt text](volumegroup.png)
+![Alt text](image/volumegroup.png)
 - **Logical Volumes**: Volume group được chia nhỏ thành nhiều logical volumes mỗi logical volume có tác dụng tương tự như partition có thể được dùng cho các mountpoint với các file system khác nhau.
   
 - Việc sử dụng LVM có tác dụng chính là ta có thể dễ dành thay đổi kích thước một logical volumes hoặc một volume group. LVM loại bỏ các khái niệm về partitions hay là disk mà thay vào đó đưa cho ta một central pool storage để làm việc.
@@ -79,12 +79,12 @@
 ## Lab for LVM:
 
 ### 1. Kiểm tra các hard disk đang có:
-![Alt text](lvm1.png)
+![Alt text](image/lvm1.png)
 
 
 ### 2. Tạo các phân vùng cho hard disk sử dụng fdisk:
 
-![Alt text](lvm2.png)
+![Alt text](image/lvm2.png)
 
 ### 3. Tạo Physical Volume: 
 
@@ -102,7 +102,7 @@
    ```
   
 - Thực hiện kiểm tra volume group đã được tạo: 
-  ![Alt text](vgdisplay.png)
+  ![Alt text](image/vgdisplay.png)
 
 ### 5. Tạo Logical Volume
 
@@ -110,7 +110,7 @@
   ```
      lvcreate -L [size_of_volume] -n [name of volume] [name of volume group]
   ```
-- Kiểm tra kết quả ![Alt text](lsblk.png)
+- Kiểm tra kết quả ![Alt text](image/lsblk.png)
 
 ### 6. Định dạng logical volume vừa tạo:
 
@@ -119,12 +119,12 @@
     mkfs -t ext4 /dev/vg-demo/lv1
   ```
 - Kiểm tra lại: 
-  ![Alt text](lsblk-f.png)
+  ![Alt text](iamge/lsblk-f.png)
 
 ### 7. Mount và sử dụng:
 - Tạo thư mục `lvmdemo` và mount logical volume vừa tạo vào thư mục này
   ```
     mount /dev/vg-demo/lv1 lvmdemo
   ```
-- Kiểm tra kết quả bằng lệnh `df -h`: ![Alt text](mount_lv.png)
+- Kiểm tra kết quả bằng lệnh `df -h`: ![Alt text](image/mount_lv.png)
   
