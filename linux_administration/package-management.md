@@ -74,3 +74,80 @@
     ```     
   - Để xem chi tiết hơn về dnf sử dụng `man dnf`.
  
+### APT:
+1. **dpkg**: là một phiên bản cấp thấp để quản lý các package trong những bản phân phối của Linux được xây dựng dựa trên Debian. **dpkg** là một công cụ dùng để cài đặt, buld, remove và quản lý các Debian packages. 
+- **dpkg** được sử dụng cho các package có đuôi `.deb`.
+- Cấu trúc câu lệnh của dpkg:
+  ```
+    dpkg [option] [.deb package name]
+  ```
+- Các option hay sử dụng trong câu lệnh với dpkg:
+  Option| Mục đích
+  ---|---
+  `-i` hoặc `--install`| Cài đặt một package. Câu lệnh này sẽ giải nén tất cả các control files của package đó. Và dựa còn control files này để remove tất cả các phiên bản cũ của package đó và cài phiên bản mới nhất trên hệ thống.
+  `-r` hoặc `--remove`| Remove tất cả các files liên quan đến package ngoại trừ các file config.
+  `-P` hoặc `--purge` | Cũng là remove tất cả các file liên quan đến package nhưng câu lệnh này sẽ xóa hoàn toàn bao gồm cả các file config.
+- Sử dụng câu lệnh dpkg:
+  Ta tiến hành tải package ryu.deb về máy qua lệnh `wget` và tiến hành cài đặt sử dụng dpkg.
+
+  ![Alt text](image/dpkg-install.png)
+
+2. APT (Advanced Package Tool):
+- Là một phiên bản nâng cấp và được xây dựng trên dpkg. **apt** cung cấp một high-level command interface cho người dùng cho việc quản lý các package. Việc này khiến cho việc quản lý các package được dễ dàng và thuận tiện hơn so với việc sử dụng `dpkg`.
+- Ngoài ra còn có các phiên bản khác như là `apt-get` và `apt-cache` cung cấp nhiều option hơn so với apt và được sử dụng phổ biến hơn do sự tương thích, sử dụng được trong nhiều phiên bản linux khác nhau.
+- Sau đây là một số câu lệnh hay được sử dụng của apt: 
+  - Cập nhật package index: APT package index được hiểu là một cơ sở dữ liệu chứa các bản records của các package có sẵn từ repo của hệ thống.
+  ```
+    sudo apt update
+  ``` 
+  - Nâng cấp phiên bản packages: Sau khi đã cập nhật được các phiên bản mới của các package để upgrade tất cả các phiên bản đó ta sử dụng (Ngoài ra, ta có thể upgrade một package bằng cách truyền tên của package đó vào sau câu lệnh trên):
+  ```
+    sudo apt upgrade {package_name} 
+  ```
+
+  - Cài đặt package: ta có thể cài đặt một hoặc nhiều package một lúc. Để cài đặt local deb files thì ta chỉ việc truyền đường dẫn của deb files đó vào câu lệnh trên.
+  ```
+    sudo apt install {package_name1} {package_name2}
+  ```
+  
+  - Gỡ package: Để gỡ các package đã được cài đặt ta sử dụng:
+  ```
+    sudo apt remove {package_name1} {package_name2}
+  ```
+  - Tuy nhiên câu lệnh trên chỉ gỡ cài đặt những package được nêu nhưng vẫn chưa thể xóa được các file config của các package đó. Để xóa hoàn toàn một package ta sử dụng câu lệnh sau:
+     ```
+       sudo apt purge {package_name}
+     ``` 
+  - Để gỡ các dependencies mà ta không sử dụng nữa sử dụng câu lệnh:
+  ```
+    sudo apt autoremove
+  ```
+  - Để liệt kê các package có sẵn, đã được cài đặt, các package có thể được upgrade:
+  ```
+    sudo apt list
+  ``` 
+  Câu lệnh sẽ in ra tất cả các thông tin của package bao gồm thông tin về phiên bản, thời gian cài đặt, kích thước của một package,... Ngoài ra để chỉ xem các package đã được cài đặt hay xem các package có thể upgrade được ta chỉ lần lượt thêm các trường `--installed`, `--upgradeable` vào sau.
+  
+  - Để tìm kiếm một package từ list các package có sẵn trong hệ thống ta sử dụng câu lệnh:
+  
+  ``` 
+    sudo apt search package_name
+  ```
+
+  - Để xem thông tin chi tiết về package:
+  ```
+    sudo apt show package_name 
+  ``` 
+
+  ![](image/show-package.png)
+
+
+# Repo trong linux 
+
+### Repo là gì ?
+- Repo hay là Repositories là vị trí lưu trữ của các software package. 
+- Repo bao gồm 3 loại chính:
+  1. **Local repo**: là repo được đặt ở trong máy local.
+  2. **Centralized Internal repo**: là các repo được lưu ở một hay nhiều server. Người dùng trong mạng LAN có thể kết nối và lấy được các package của các repo này.
+  3. **Vendor repo**: được quản lý bởi các vendor trên Internet. Bằng cách kết nối Internet, ta có thể tải và cài đặt các package có trong vendor repo.
+### Các tạo một repo: 
