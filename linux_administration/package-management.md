@@ -142,7 +142,7 @@
   ![](image/show-package.png)
 
 
-# Repo trong linux 
+# Repo và mirror trong linux 
 
 ### Repo là gì ?
 - Repo hay là Repositories là vị trí lưu trữ của các software package. 
@@ -150,4 +150,104 @@
   1. **Local repo**: là repo được đặt ở trong máy local.
   2. **Centralized Internal repo**: là các repo được lưu ở một hay nhiều server. Người dùng trong mạng LAN có thể kết nối và lấy được các package của các repo này.
   3. **Vendor repo**: được quản lý bởi các vendor trên Internet. Bằng cách kết nối Internet, ta có thể tải và cài đặt các package có trong vendor repo.
-### Các tạo một repo: 
+- Tất cả các repo 
+### Mirror là gì ?
+- Mirror được định nghĩa là các bản sao chép của các repo từ một nơi này đến một nơi khác. Một *mirror* có thể được tạo ra để duy trì một bản sao phản ánh hoặc đồng bộ với kho lưu trữ gốc để tối ưu hóa việc truy cập cho người dùng cục bộ. 
+- Ngoài ra việc tạo mirror có thể đảm bảo an toàn cho mã nguồn khi repo gốc gặp sự cố.
+
+### Tạo local repo với yum và apt:
+
+- Đối với yum:
+  - B1: Tạo một thư mục có tên là *localrepo*:
+    ```
+      sudo mkdir /path/to/localrepo
+    ```
+  - B2: Sao chéo các gói RPM vào thư mục localrepo:
+    ```
+      sudo cp /path/to/your/packages/*.rpm /path/to/localrepo
+    ```
+  - B3: Tạo các metadata cho localrepo với lệnh `createrepo`:
+    ```
+      sudo createrepo /path/to/localrepo
+    ```
+  - B4: Cấu hình file localrepo.repo trong thư mục `/etc/yum.repos.d`:
+    ```
+       [localrepo]
+       name=Local Repository
+       baseurl=file:///path/to/localrepo
+       enabled=1
+       gpgcheck=0
+    ```
+    Trong đó, **[localrepo]** là tên của repo, **name** là tên mô tả của repo, là tên mà yum sẽ hiển thụ khi sử dụng các lệnh liên quan đến repo như `yum repolist`, **baseurl** là URL hoặc đường dẫn đến repo mà mình tạo, **enabled** là trường dùng để xác định xem repo có hoạt động hay không(giá trị 1 là repo được kích hoạt, còn giá trị 0 là repo bị vô hiệu hóa), **gpgcheck** là trường để xác định xem yum có kiểm tra chữ ký GPG(GNU Privacy Guard) hay không(giá trị 1 là có kiểm tra, còn giá trị 0 thì không kiểm tra).
+  - B5:Kiểm tra và sử dụng local repo đã được tạo:
+    ```
+      sudo yum repolist
+    ```
+- Đối với apt:
+  -  B1: Cài đặt Apache Web Server:
+    ```
+      sudo apt-get install apache2
+    ```
+  -  B2: Tạo thư mục `repo` trong Apache doucement root để host local apt repo:
+    ```
+      sudo mkdir /var/www/html/repo
+    ```
+  -  B3: Copy file .deb ở home vào trong thư mục vừa tạo:
+    ```
+      sudo cp *.deb /var/www/html/repo
+    ``` 
+  -  B4: Kiểm tra lại trong thư mục repo:
+    ```
+      ls /var/www/html/repo/
+    ```
+     ![](image/lsrepo.png)
+
+  -  B5: Viết Script file để có thể scan và update được file Packages.gz:
+    Tạo script file:  
+    ```
+      sudo nano /bin/update-mydebs
+    ```   
+    Thêm lệnh vào script file:
+    ```
+     #!/bin/bash
+     cd /var/www/html/repo
+     dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+    ```
+    Cấp permission cho file vừa tạo:
+    ```
+      sudo chmod u+x /bin/update-mydebs
+    ```
+    Chạy file script:
+    ```
+      sudo /bin/update-mydebs
+    ```
+    ![](image/execute_script.png)
+  - B6: Cấu hình Apache phục vụ repo:
+    ```
+      sudo nano /etc/apache2/sites-available/000-default.conf
+    ``` 
+    Thêm cấu hình cho localrepo:
+    ```
+      Alias /localrepo /var/www/html/localrepo
+      <Directory /var/www/html/localrepo>
+         Options Indexes FollowSymLinks
+         AllowOverride None
+      Require all granted
+      </Directory>
+    ```
+    Sau đó, restart lại service apache.
+  - B6: Thêm APT repo vừa tạo vào `/etc/apt/sources.list`
+   ```
+    # Local APT Repository
+    deb [allow-insecure=yes] http://127.0.0.1/repo ./   
+   ```  
+  - B7: Upadte các package:
+    ```
+      sudo apt update
+    ```
+    ![](image/apt-update.png)
+  - B8: Thực hiện cài đặt jfsutils có trong repo:
+    ```
+      sudo apt install jfsutils 
+    ```
+    ![](image/jfsu.png)
