@@ -30,4 +30,42 @@
   ```
   ![]()
 
+## systemd vs sysVinit(systemV):
+### Service:
+- Service là các tiến trình hoặc chương trình cung cấp khả năng hỗ trợ các yêu cầu và theo dõi từ các tiến trình khác.
+- Hầu hết các service trong linux đều được triển khai ở dạng daemons.
+- Daemons có thể được coi là các chương trình chạy ngầm trong hệ điều hành, cung cấp các tác vụ hệ thống cho các application hoặc người dùng.
+- init process là backend service để điều khiển khi nào thì các service được khởi tạo và các service được khởi tạo như thế nào.
+- init daemon là file cấu hình để khởi tạo các service được liệt kê trong đó (các service này sẽ được chạy đến khi nào mà hệ thống không còn khả năng hoạt động nữa thì thôi).
+### systemd: 
+- Là một chương trình cung cấp các phương thức khởi tạo, quản lý cho các service, systemd được sử dụng một cách phổ biến trong hầu hết các phiên bản distribution của Linux.
+
+![](image/Systemd-components.png)
+- Trong systemd, units là các tài nguyên mà systemd có thể quản lý như là các services, sockets, devices, mount,... Mỗi một loại unit đều được tương ứng với một loại resource đặc biệt:
+  1. service unit(`.service`): Unit này điều khiển các daemons và các background services. Nó định nghĩa cách mà một service được khởi tạo, được dừng, enabled hay disabled như thế nào, và cách quản lý các service đó.
+  2. socket unit(`.socket`): socket unit được sử dụng để thiết lập và quản lý sự giao tiếp giữa các tiến trình thông qua các socket. Các tiến trình có thể kích hoạt các tiến trình liên quan khi socket được thiết lập
+  3. device unit(`.device`): Device unit đại diện cho các kernel devices, systemd có thể thiết lập các cấu hình cho các devices này hoặc take action khi mà các device này trở nên available hoặc unavailable.
+  4. mount unit(`.mount`): Mount unit quản lý các mount point trong các file system.
+  5. target unit(`.target`): Các units này dùng để nhóm các units khác lại với nhau, hoạt động như một điểm để đồng bộ hóa các unit với nhau.\
+  6. timer unit(`.timer`): Timer unit có thể kích hoạt các hoạt động ở một thời điểm nào đó hoặc theo một khoảng thời gian định kỳ.
+- Mỗi loại unit đều có file cấu hình riêng, nhưng file này định nghĩa systemd quản lý các resource liên quan đến các unit này như thế nào.
+- Ta có thể quản lý các unit bằng câu lệnh systemctl:
+  ```
+     systemctl [command] [service name]
+  ```
+  Command|Tác dụng
+  ---|---
+  status| xem trạng thái của service.
+  enable| cho phép service hoạt động.
+  disable| không cho phép service hoạt động.
+  start| khởi động service.
+  restart| khởi động lại service.
+  stop| dừng service.
+
+### sysVinit(systemV):
+- Một phiên bản cũ hơn cũng cung cấp các phương pháp khởi tạo cho các service nhưng đã gần như bị thay thế bởi systemd.
+- Khác với systemd, sysVinit sử dụng cơ chế runlevels để xác định loại daemons nào sẽ được chạy.
+![](image/Runlevel.png)
+- Các phiên bản đistribution Linux khác nhau thì có runlevels mặc định khác nhau. Ví dụ một số hệ thống mặc định ở runlevel 3 (Multiuser Mode with Networking), còn một số hệ thống lại được mặc định ở runlevel 5 (Multiuser with GUI).
+- Để chuyển sang các runlevels khác nhau sử dụng câu lệnh `telinit`.
 - 
