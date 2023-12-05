@@ -251,3 +251,28 @@
       sudo apt install jfsutils 
     ```
     ![](image/jfsu.png)
+### Tạo mirror với apt:
+1. Cài đặt package apt-mirror:
+   ```
+     sudo apt install apt-mirror
+   ```
+2. Thêm url của local repo vừa tạo ở trên vào file `/etc/apt/mirror.list`
+   
+   ![](image/mirror-list.png)
+
+3. Chạy apt-mirror để download các package:
+   ```
+      sudo apt-mirror
+   ```
+
+   ![](image/apt-mirror.png)
+
+4. Tạo symbolic link từ mirror repo vào Apache's web root:
+   ```
+      sudo ln -s /var/spool/apt-mirror/mirror/127.0.0.1/repo /var/www/html/ubuntu_mirror
+   ``` 
+5. Khởi động lại service của apache: 
+   ```
+      sudo systemctl restart apache2
+   ```
+
