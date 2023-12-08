@@ -193,7 +193,9 @@
   ```
 
 - **Sticky bit** là một quyền đặc biệt bảo vệ một file trong một directory. File đó có thể bị modify nhưng mà không thể bị xóa.
+  
   ![Alt text](image/stickybit.png)
+  
   - Ở đây ta có thể thấy sticky bit đã được set cho thư mục Crypto. Do vậy mà khi chuyển về user thông thường các user sẽ không thể xóa được những file trong thư mục Crypto.
 
 - Để thực hiện set sticky bit ta dùng câu lệnh:
