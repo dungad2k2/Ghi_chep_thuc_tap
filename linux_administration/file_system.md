@@ -95,7 +95,7 @@
   ```
 - Kiểm tra các physical volume đã tạo được: 
    
-   ![Alt text](pvs.png)
+   ![Alt text](image/pvs.png)
   
 ### 4. Tạo Volume Group:
 - Từ các Physical Volume đã được tạo ta có thể nhóm chùng thành một nhóm
